@@ -42,6 +42,7 @@ function App() {
   const [selectedLead, setSelectedLead] = useState(null);
   const [filter, setFilter] = useState('all');
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const filterRef = useRef(null);
 
   useEffect(() => {
@@ -219,27 +220,40 @@ function App() {
   return (
     <div className="container-fluid">
       <div className="row">
-        <div className="col-md-2 sidebar p-3">
+        <div className={`col-md-2 sidebar p-3 ${sidebarOpen ? 'open' : ''}`}>
+          <button className="sidebar-close" onClick={() => setSidebarOpen(false)}>
+            <i className="fas fa-times"></i>
+          </button>
           <h4 className="mb-4 px-3">
             <i className="fas fa-home me-2"></i>RealEstate CRM
           </h4>
           <nav>
-            <a href="#" className={currentView === 'dashboard' ? 'active' : ''} onClick={(e) => { e.preventDefault(); setCurrentView('dashboard'); setFilter('all'); }}>
+            <a href="#" className={currentView === 'dashboard' ? 'active' : ''} onClick={(e) => { e.preventDefault(); setCurrentView('dashboard'); setFilter('all'); setSidebarOpen(false); }}>
               <i className="fas fa-chart-pie"></i> Dashboard
             </a>
-            <a href="#" onClick={(e) => { e.preventDefault(); setCurrentView('all'); setFilter('all'); }}>
+            <a href="#" onClick={(e) => { e.preventDefault(); setCurrentView('all'); setFilter('all'); setSidebarOpen(false); }}>
               <i className="fas fa-users"></i> All Leads
             </a>
-            <a href="#" onClick={(e) => { e.preventDefault(); handleFilterClick('ads'); }}>
+            <a href="#" onClick={(e) => { e.preventDefault(); handleFilterClick('ads'); setSidebarOpen(false); }}>
               <i className="fas fa-ad"></i> Ad Leads
             </a>
-            <a href="#" onClick={(e) => { e.preventDefault(); setCurrentView('analytics'); }}>
+            <a href="#" onClick={(e) => { e.preventDefault(); setCurrentView('analytics'); setSidebarOpen(false); }}>
               <i className="fas fa-chart-line"></i> Analytics
             </a>
           </nav>
         </div>
 
-        <div className="col-md-10 p-0">
+        {sidebarOpen && <div className="overlay show" onClick={() => setSidebarOpen(false)}></div>}
+
+        <div className="col-md-10 p-0 main-content">
+          <div className="mobile-header">
+            <button className="mobile-menu-btn" onClick={() => setSidebarOpen(true)}>
+              <i className="fas fa-bars"></i>
+            </button>
+            <h4>CRM</h4>
+            <div style={{ width: 40 }}></div>
+          </div>
+          
           <div className="top-bar d-flex justify-content-between align-items-center">
             <h5 className="m-0">
               {currentView === 'dashboard' && 'Dashboard'}
